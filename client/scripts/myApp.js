@@ -1,5 +1,5 @@
 angular
-  .module('myApp', ['ngRoute', 'ngMaterial'])
+  .module('myApp', ['ngRoute', 'ngMaterial', 'md.data.table'])
   .config(['$locationProvider', '$routeProvider', config]);
 // -----ROUTES-----
 function config($locationProvider, $routeProvider) {
@@ -185,6 +185,16 @@ function config($locationProvider, $routeProvider) {
         }]
       }
     })
+    .when('/caseworker-appointment-reschedule', {
+      templateUrl: '/views/templates/caseworker-appointment-reschedule.html',
+      controller: 'CaseworkerAppointmentRescheduleController',
+      controllerAs: 'vm',
+      resolve: { // get user from factory
+        getuser : ['UserService', function(UserService){
+          return UserService.getUser();
+        }]
+      }
+    })
     .when('/caseworker-appointment-form', {
       templateUrl: '/views/templates/caseworker-appointment-form.html',
       controller: 'CaseworkerAppointmentFormController',
@@ -195,9 +205,9 @@ function config($locationProvider, $routeProvider) {
         }]
       }
     })
-    .when('/caseworker-appointment-edit', {
-      templateUrl: '/views/templates/caseworker-appointment-edit.html',
-      controller: 'CaseworkerAppointmentEditController',
+    .when('/caseworker-appointment-edit-form', {
+      templateUrl: '/views/templates/caseworker-appointment-edit-form.html',
+      controller: 'CaseworkerAppointmentEditFormController',
       controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){

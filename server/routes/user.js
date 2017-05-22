@@ -5,11 +5,25 @@ var passport = require('passport');
 // Handles Ajax request for user information if user is authenticated
 router.get('/', function(req, res) {
     // check if logged in
-    //---console.log('checking /user route ');
+    console.log('checking /user route ');
     if(req.isAuthenticated()) {
         // send back user object from database
-        console.log(req.user);
-        res.send(req.user);
+        var userObject = {
+          access_disabled: req.user.access_disabled,
+          agency_id: req.user.agency_id,
+          city: req.user.city,
+          day_phone: req.user.day_phone,
+          department: req.user.department,
+          email: req.user.email,
+          ext: req.user.ext,
+          first: req.user.first,
+          last: req.user.last,
+          state: req.user.state,
+          street: req.user.street,
+          user_type_id: req.user.user_type_id,
+          zip_code: req.user.zip_code
+        };
+        res.send(userObject);
     } else {
         // failure best handled on the server. do redirect here.
         res.send(false);

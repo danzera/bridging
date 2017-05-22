@@ -1,6 +1,6 @@
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentFormController', ['$location', 'UserService', function($location, UserService) {
+  .controller('CaseworkerAppointmentEditFormController', ['$location', 'UserService', function($location, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 

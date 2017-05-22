@@ -1,16 +1,37 @@
 angular
   .module('myApp')
-  .factory('UserService', ['$http', '$location', function($http, $location){
-  var userObject = {
+  .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
 
+  var userObject = {};
+
+  var agencies = {};
+  var agency = {};
+  var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
+
+  return {
+    userObject: userObject,
+    newAppointment: newAppointment,
+    agencies: agencies,
+    agency: agency,
+    getAgencies: getAgencies,
+    viewAgency: viewAgency,
+    loginUser: loginUser,
+    registerUser: registerUser,
+    getUser: getUser,
+    logout: logout,
+    redirectToLogin: redirectToLogin,
+    redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
+    redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
   };
 
   //--------AUTHENTICATION--------
   // login an existing user
   function loginUser(tempUser) {
     return $http.post('/', tempUser).then(function(response) {
-      if (response.data.username) { // login successful
-        return response.data.type;
+      console.log(response);
+      if (response.data.email) { // login successful
+        console.log(response.data.user_type_id);
+        return response.data.user_type_id;
  // ^^^ return response.data.____; ^^^
  // ^^^ WHATEVER WE'RE CALLING USER "type" in the DB ^^^
       } else { // failed login
@@ -27,9 +48,12 @@ angular
   // verify user authentication
   function getUser() {
     $http.get('/user').then(function(response) {
-      if (!response.data.username) {
-        // redirectToLogin();
+      if (!response.data.email) {
+        redirectToLogin();
+      } else {
+        userObject.user = response.data;
       }
+      console.log(userObject);
     });
   } // end getUser()
 
@@ -47,8 +71,8 @@ angular
     $location.path('/login');
   }
 
-  function redirectToAdminAppointmentsPending() {
-    $location.path('/admin-appointments-pending');
+  function redirectToAdminAppointmentsAll() {
+    $location.path('/admin-appointments-all');
   }
 
   function redirectToCaseworkerAppointmentsAll() {
@@ -59,22 +83,29 @@ angular
 
   //---------SUPPORT FUNCTIONS-------
   function clearCurrentUser() {
-    // clear out the userObject's properties on logout
-    // for example purposes:
-    // userObject.firstName = '';
-    // userObject.lastName = '';
-    // appointmentsArray = [];
+    userObject.user = {};
+    userObject.newAppointment = {};
+    userObject.agencies = {};
   }
   //------END SUPPORT FUNCTIONS-----
 
-  return {
-    userObject: userObject,
-    loginUser: loginUser,
-    registerUser: registerUser,
-    getUser: getUser,
-    logout: logout,
-    redirectToLogin: redirectToLogin,
-    redirectToAdminAppointmentsPending: redirectToAdminAppointmentsPending,
-    redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
-  };
+  //GETS all agencies from db
+  function getAgencies() {
+    console.log('client sent request to server for all agencies');
+    $http.get('/agencies').then(function(response) {
+        agencies.array = response.data;
+        console.log(agencies.array);
+    });
+  }
+
+  //Views details of single selected agency
+  function viewAgency(agency_id) {
+    console.log('view details clicked ', agency_id);
+    var id = agency_id.id;
+    console.log('agency id: ', id);
+    $http.get('/agencies/' + id).then(function(response) {
+      agency.selected = response.data;
+      console.log('Agency record back from db: ', agency.selected);
+    });
+  }
 }]);
