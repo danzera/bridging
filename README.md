@@ -128,25 +128,25 @@ git clone https://github.com/BridgingMN/bridging-connect.git
 npm install
 ```
 
-2. Ensure PostgreSql is running.
+3. Ensure PostgreSql is running.
 
 ```
 brew services start postgresql
 ```
 
-3. Start Grunt.
+4. Start Grunt.
 
 ```
 grunt
 ```
 
-4. Spin up the Server.
+5. Spin up the Server.
 
 ```
 npm start
 ```
 
-5. Open in the browser.
+6. Open in the browser.
 
 ```
 localhost:5000
